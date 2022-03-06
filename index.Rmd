@@ -1,0 +1,216 @@
+---
+title: "A flexible framework for natural effect models"
+subtitle: "Causal mediation using __medflex__ package"
+author: "_Upul Cooray_"
+date: "2022/03/04 (updated: `r Sys.Date()`)"
+output:
+  xaringan::moon_reader:
+    chakra: libs/remark-latest.min.js
+    css: 
+      - default
+      - css/upul.css
+    seal: false
+    nature:
+      titleSlideClass: ["bottom", "left"]
+      slideNumberFormat: "%current%"
+      highlightStyle: github
+      highlightLines: true
+      ratio: 16:9
+      countIncrementalSlides: true
+---
+
+```{r setup, include = FALSE}
+library(knitr)
+library(tidyverse)
+library(xaringanExtra)
+library(janitor)
+library(kableExtra)
+library(medflex)
+library(fontawesome)
+
+source("helper_functions.R")
+
+# set default options
+opts_chunk$set(echo = FALSE,message = FALSE,warning = FALSE)
+
+xaringanExtra::use_xaringan_extra(c("tile_view", "animate_all", "tachyons", 
+                                    "panelset","scribble"))
+
+xaringanExtra::style_panelset_tabs(
+  active_foreground = "#0051BA",
+  hover_foreground = "#d22",
+  font_family = "Roboto"
+  )
+
+xaringan::summon_remark(to = "libs")
+
+```
+```{r include=FALSE}
+
+# df <- readRDS("r_data.rds")
+# set.seed(198511)
+# data <- df %>% dplyr::select(id=samplenumber19, 
+#                       bmi=bmi, educ=educ5_19, age=age_meibo19, 
+#                       sex= sex_meibo19, smok= smok5_19, 
+#                       hd=dgns2hd19, dm= dgns2dm19) %>%
+#   mutate_all(as.numeric) %>%
+#   filter(bmi>16 & bmi<40) %>% 
+#   na.omit() %>%
+#   filter(educ!=5) %>%
+#   sample_n(5000) %>%
+#   mutate(id= 1:length(id),
+#          sex= factor(sex,
+#                      levels = c("1","2"),
+#                      labels = c("M","F")),
+#          smok= factor(smok,
+#                       levels=  paste0(1:5),
+#                       labels = c("S","S","S","S","NS")),
+#          educ= factor(educ,
+#                       levels = paste0(1:4),
+#                       labels = c("L","L","M","H"))
+#          )
+# 
+# saveRDS(data,file="demo.rds")
+
+data <- readRDS("demo.rds")
+
+```
+
+class: title-slide, left, bottom
+background-image: url("title.jpg")
+background-position: 80% 0%
+background-size: auto 
+
+
+# `r rmarkdown::metadata$title`
+<hr>            <!-- horizontal line --> 
+
+
+## .purple[_Causal mediation using __medflex__ `r fa("r-project", fill = "steelblue")` package_]
+#### _`r rmarkdown::metadata$author`_
+.date[.grey[ 2022/03/04 (updated: `r Sys.Date()`)]]
+
+---
+class: inverse
+background-image: url("flare.png")
+background-position:100% 0%
+background-size: 35% auto 
+
+# Objectives 
+
+- To understand the intuition behind;
+
+ 1. Controlled Direct Effect (.red[CDE])
+ 
+ 2. Natural Direct Effect (.green[NDE])
+ 
+ 2. Natural Indirect Effect (.blue[NIE])
+ 
+- Advantages of .red[_medflex_] package over .red[_paramed_] & .red[_med4way_].
+
+- Understand the implementation of _medflex_ using an example.
+ 
+---
+
+```{r echo=FALSE}
+xaringanExtra::style_panelset_tabs(
+  active_foreground = "#0051BA",
+  hover_foreground = "#fc03a5",
+  hover_border_color = "#03fc98",
+  tabs_border_bottom = "#f77c7c",
+  active_border_color = "#e7fc03",
+  font_family = "Roboto"
+)
+
+
+```
+
+# CDE, NDE, & NIE
+<hr>
+<br>
+
+.panelset.sideways[ 
+
+.panel[.panel-name[Mediation]
+ 
+ content 1
+
+]
+
+.panel[.panel-name[Why not controlling]
+
+content 2
+
+]
+
+.panel[.panel-name[Intervene on mediator]
+
+content 3
+
+]
+
+.panel[.panel-name[CDE]
+
+content 4
+
+]
+
+
+.panel[.panel-name[NDE]
+
+content 5
+
+]
+
+.panel[.panel-name[NIE]
+
+content 6
+
+]
+
+
+] 
+
+---
+
+
+```{r}
+
+data %>% head() %>% kable()
+
+data %>% tab(smok,hd)
+
+lm <- glm(bmi~smok+age+sex,data = data)
+
+summary(lm)
+
+```
+
+---
+
+
+```{r}
+impFit <- glm(factor(hd) ~ educ * smok + sex + age,
+              family = binomial("logit"), data = data)
+
+
+expanded_data <- neImpute(impFit)
+
+head(expanded_data) %>% knitr::kable(digits = 2)
+
+```
+
+The outcomes are no longer binary, but are substituted by conditional mean imputations
+
+
+---
+
+```{r}
+ neMod1 <- neModel(hd ~ educ0 * educ1 + sex + age,
+ family = binomial("logit"), expData = expanded_data, se = "robust")
+
+
+summary(neMod1)
+
+```
+
