@@ -1,0 +1,351 @@
+/*-- LINKS/ANCHORS --*/
+  a {
+    color:              #005EB8;
+      border-bottom:      2px solid #005EB8;
+    line-height:        1.5em;
+  }
+
+a:hover {
+  border-bottom:      0px;
+}
+
+
+/*-- HEADINGS --*/
+  .remark-slide-content h1 {
+    color:              #005EB8;
+      font-size:          45px;
+    line-height:        1em;
+  }
+
+.remark-slide-content h2 {
+  font-size:          35px;
+  color:              #005EB8;
+    line-height:        1em;
+}
+
+.remark-slide-content h3 {
+  font-size:          25px;
+  color:              #000000;
+}
+
+/*-- PARAGRAPH TEXT --*/
+  .remark-slide-content {
+    font-size:          25px;
+    line-height:        1.5em;
+
+  }
+
+/*-- HORIZONTAL BARS --*/
+  hr {
+    content:            none;
+    display:            block;
+    border:             none;
+    background-color:   #7D3C98;
+      height:             0.2em;
+    margin-bottom:  0em;
+    padding-top: -1em;
+  }
+
+/*-- BOTTOM-OF-SLIDE PROPERTIES --*/
+
+  /*-- Footnote --*/
+  .footnote {
+    position:           absolute;
+    bottom:             2em;
+    padding-right:      4em;
+    font-size:          80%;
+    line-height:        1.3em;
+  }
+
+
+.date {
+  position:           absolute;
+  bottom:             2px;
+  right:              100px;
+  font-size:          90%;
+  line-height:        1.5em;
+
+}
+
+
+
+/*-- Slide number --*/
+  .remark-slide-number {
+    color:              #000000;
+  }
+
+/*-- CODE TEXT --*/
+
+  /*-- In-line highlighting within text --*/
+  .remark-code, .remark-inline-code {
+    font-size:          90%;
+    font-weight:        400;
+    color:              #231F20;
+      background:         #E8EDEE;
+      border-radius:      3px;
+    padding:            1px 1px 1px 1px;
+  }
+
+/*-- Line highlighting within code --*/
+  .remark-code-line-highlighted {
+    background-color:   #E8EDEE;
+  }
+
+/*-- CODE CHUNKS --*/
+
+  /*-- Code chunk background layer --*/
+  pre {
+    /*border: 2px solid rgba(204, 189, 204, 0.8); /* code chunk border*/
+      border:             none;
+    box-shadow:         2px 2px 2px 2px #eee;
+    padding:            0.1em;                    /* padding between code chunk and border */
+      background:         none !important;
+    overflow-x:         auto;                     /* enable horizontal scrolling with overflow */
+      border-radius:      1px;                      /* modify rounding of corners*/
+  }
+
+/*--  --*/
+  pre code {
+    background:          none;
+    font-size:           18px !important;
+  }
+
+/*-- TABLES --*/
+  .remark-slide table {
+    margin:              auto;
+    border-top:          1px solid #768692;
+    border-bottom:       1px solid #768692;
+  }
+
+/*-- Table header --*/
+  .remark-slide table thead th {
+    border-bottom:       1px solid #768692;
+  }
+
+/*-- Table rows (even) --*/
+  .remark-slide thead, .remark-slide tfoot, .remark-slide tr:nth-child(even) {
+    background:          #E8EDEE;
+  }
+
+/*-- BLOCK QUOTE --*/
+  blockquote {
+    border-left:         solid 5px #E8EDEE;
+    padding-left:        1em;
+  }
+
+/*-- INVERSE SLIDE MODIFICATIONS --*/
+
+  /*-- Slide background and text (inverse) --*/
+  .inverse {
+    background-color: #0A0A0A;
+      color: #d6d6d6;
+      text-shadow: 0 0 20px #333;
+  }
+
+
+.inverse h1 {
+  font-size:          60px;
+  line-height:        1em;
+}
+
+
+
+/*-- Headings (inverse) --*/
+  .inverse h1, .inverse h2, .inverse h3 {
+    color:              #2685E3;
+  }
+
+/*-- Horizontal bars (inverse) --*/
+  .inverse hr {
+    background-color:   #2685E3;
+  }
+
+/*-- Links/anchors (inverse) --*/
+  .inverse a {
+    color:              white;
+    border-bottom:      2px solid white;
+  }
+
+.inverse a:hover {
+  border-bottom: none;
+}
+
+
+
+
+/*-- CUSTOM CLASS FOR THE TITLE SLIDE --*/
+
+
+  /*-- University logo --*/
+  .title-slide {
+    background-image:    url(../img/tu.png), url(../img/Jages-logo.png);
+    background-position: 99% 20px, 99px 8%;     /*--width  hight --*/
+      background-size: auto 200px,auto 150px;
+    padding-bottom: 100px;
+  }
+
+
+/*-- Headings --*/
+  .title-slide h1 {
+    color:               #000000;
+  }
+
+.title-slide h4 {
+  color:               #000000;
+    font-size:           22px;
+  line-height:        0.9em;
+  font-weight:        normal;
+  font-style:         italic;
+}
+
+
+/*-- Hides slide number from title slide --*/
+  .title-slide .remark-slide-number {
+    display:             none;
+  }
+
+/*-- CUSTOM CLASSES FOR TEXT EMPHASIS --*/
+.blue       { color:   #005EB8 }
+.green      { color:   #009639 }
+.pink       { color:   #AE2573 }
+.red        { color:   #DA291C }
+.warmyellow { color:   #FFB81C }
+.grey       {color:    #5D6D7E }
+.purple     {color:    #7D3C98 }
+
+
+
+.one ul {
+  list-style-type:"\1F449";
+  margin-top: 1em;
+  margin-bottom: 1 em;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0px;
+  text-indent: 10px;
+  text-align: left ;
+}
+
+.two ul {
+  list-style-type:"\22C7";
+  padding-left: 40px;
+  text-indent: 10px;f
+}
+
+/******************
+*
+* Coloured content boxes
+*
+****************/
+
+
+.content-box {
+  box-sizing: content-box;
+  background-color: #e2e2e2;
+    Total width: 160px + (2 * 20px) + (2 * 8px) = 216px
+    Total height: 80px + (2 * 20px) + (2 * 8px) = 136px
+    Content box width: 160px
+    Content box height: 80px
+}
+
+
+  .content-box-blue,
+  .content-box-gray,
+  .content-box-grey,
+  .content-box-army,
+  .content-box-green,
+  .content-box-purple,
+  .content-box-red,
+  .content-box-yellow,
+  .content-box-noboader{
+    border-radius: 15px;
+    margin: 0 0 25px;
+    overflow: hidden;
+    padding: 20px;
+    width: 100%;
+    width: fit-content;
+    bl: fit-content;
+  }
+
+  .content-box-blue {
+    background-color: #F0F8FF;
+
+  }
+
+
+  .item {
+    width: -moz-fit-content;
+    width: fit-content;
+    background-color: #8ca0ff;
+      padding: 5px;
+    margin-bottom: 1em;
+    position: absolute; top: 100px; left: 200px;
+  }
+
+
+
+  .content-box-gray {
+    background-color: #e2e2e2;
+  }
+
+  .content-box-grey {
+    background-color: #F5F5F5;
+  }
+
+  .content-box-army {
+    background-color: #737a36;
+  }
+
+  .content-box-green {
+    background-color: #d9edc2;
+  }
+
+  .content-box-purple {
+    background-color: #e2e2f9;
+  }
+
+  .content-box-red {
+    background-color: #f9dbdb;
+  }
+
+  .content-box-noboader {
+    width: -moz-fit-content;
+    width: fit-content;
+    padding: 5px;
+    margin-bottom: 1em;
+
+
+  }
+
+
+  .content-box-yellow {
+    width: -moz-fit-content;
+    width: fit-content;
+    padding: 5px;
+    margin-bottom: 0.1em;
+    border: 5px solid green;
+
+  }
+
+  .full-width {
+    display: flex;
+    width: 100%;
+    flex: 1 1 auto;
+  }
+
+
+  .pull-left {
+    float: left;
+    width: 49%;
+  }
+
+  .pull-right {
+    float: right;
+    width: 49%;
+  }
+
+
+  .text-cen{
+    text-align: center;
+  }
+
