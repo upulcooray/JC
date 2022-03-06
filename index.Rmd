@@ -34,7 +34,7 @@ source("helper_functions.R")
 opts_chunk$set(echo = FALSE,message = FALSE,warning = FALSE)
 
 xaringanExtra::use_xaringan_extra(c("tile_view", "animate_all", "tachyons", 
-                                    "panelset","scribble"))
+                                    "panelset","scribble","fit_screen"))
 
 xaringanExtra::style_panelset_tabs(
   active_foreground = "#0051BA",
@@ -73,6 +73,8 @@ xaringan::summon_remark(to = "libs")
 # saveRDS(data,file="demo.rds")
 
 data <- readRDS("demo.rds")
+
+data <- data %>% dplyr::select(id,educ,smok,hd, age,sex)
 
 ```
 
@@ -127,90 +129,261 @@ xaringanExtra::style_panelset_tabs(
 
 # CDE, NDE, & NIE
 <hr>
-<br>
 
-.panelset.sideways[ 
+
+.panelset[ 
 
 .panel[.panel-name[Mediation]
- 
- content 1
+  <br>
+ .w-85.center[
+ ![](d1.png)]
 
 ]
 
 .panel[.panel-name[Why not controlling]
-
-content 2
+  <br>
+ .pull-left[
+ <br>
+ .w-80[
+  ![](d1.png)]]
+ 
+ .pull-right[.w-85[
+  ![](d3.png)]]
 
 ]
 
 .panel[.panel-name[Intervene on mediator]
 
-content 3
+ .pull-left[
+  .w-60[
+  ![](d3.png)]
+  ]
+  
+  .pull-right[
+  .w-80[
+  ![](d5.png)]
+  ]
+  
+`r fa("check", fill = "green")` If we .green[intervene] on mediator (setting it to a predetermined value [m]), all __incoming arrows__ to the mediator goes away.
 
 ]
 
 .panel[.panel-name[CDE]
 
-content 4
+.w-40.absolute.left-4.center[
+![](d5.png)]
 
-]
+
+ .pull-right[
+
+ 
+$$CDE= \mathbb{E}[Y_{(A=1,M=m)} - Y_{(A=0,M=m)}]$$
+
+
+$$[Y_{(A=1,M=m)}]= [HD_{(Educ=1, Smok=1|0)}]$$ 
+
+
+$$[Y_{(A=0,M=m)}]= [HD_{(Educ=0, Smok=1|0)}]$$ 
+ 
+ ### .red[Two main limitations of CDE]
+ 
+ 1. We get multiple $CDEs$  based on the value we set on $m$ 
+ 2. Cannot decompose into .green[_direct effect_] and .yellow[_indirect effect_]
+  
+ ]
+ 
+ 
+ ]
 
 
 .panel[.panel-name[NDE]
 
-content 5
+.w-40.absolute.left-4.top-2[
+![](d6.png)]
+
+
+ .pull-right[
+
+ 
+$$NDE= \mathbb{E}[Y_{(A=1, M|A=0)} - Y_{(A=0, M|A=0)}]$$
+
+
+$$[Y_{(A=1, M|A=0)}]= [HD_{(Educ=1, Smok|Educ=0)}]$$ 
+
+
+$$[Y_{(A=0, M|A=0)}]= [HD_{(Educ=0, Smok|Educ=0)}]$$
+ 
+
+  
+ ]
+ 
+ <br>
+  ### .red[Why "Natural"]
+ 
+Mediator is taking its natural values related to  absence of the exposure.
+ 
+Eg: Individual 1;  Level of smoking if the individual is exposed to high level of education (A=0).
+ 
 
 ]
 
 .panel[.panel-name[NIE]
 
-content 6
+.w-40.absolute.left-4.center[
+![](d7.png)]
 
+
+ .pull-right[
+
+ 
+$$NIE= \mathbb{E}[Y_{(A=1, M|A=1)} - Y_{(A=1, M|A=0)}]$$
+
+
+$$[Y_{(A=1, M|A=1)}]= [HD_{(Educ=1, Smok|Educ=1)}]$$ 
+
+
+$$[Y_{(A=1, M|A=0)}]= [HD_{(Educ=1, Smok|Educ=0)}]$$
+.center[   
+### .red[Total Effect (TE)]
+   
+   
+$$TE= NDE+NIE$$
+ ] 
+  
+ ]
+ 
 ]
-
 
 ] 
 
 ---
+class: inverse
+background-image: url(mod_types.png)
+background-size: 50% auto
+background-position: 100px 30%
 
+## Advantages of using .red[_medflex_] to estimate natural effect models
+<hr>
+
+<br><br><br><br><br>
+###  .yellow[Can estimate with any interaction/ effect modifications]
+- $Exposure * Mediator$
+- $Exposure * Covariate$
+- $mediator * Covariate$
+- $(Exposure * mediator) * covariate$
+
+
+---
+class: inverse
+background-image: url(mod_types.png)
+background-size: 50% auto
+background-position: 100px 30%
+
+## Advantages of using .red[_medflex_] to estimate natural effect models
+<hr>
+
+<br><br><br><br><br>
+###  .yellow[Not restricted to parametric models]
+### .yellow[Allows users to fit an imputation model using .red[_GAM_] or ensemble techniques implemented in the .red[SuperLearner].]
+---
+background-image: url(workflow.png)
+background-position: center
+background-size: auto 60% 
+
+## Basic _medflex_ workflow 
+<hr>
+
+---
+## Imputation based approach example using JAGES-2019
+<hr>
+`r fa("exclamation-triangle", fill = "yellow")`  Causal mediation cannot be done using cross-sectional data (using them just to demonstrate the method)
+
+
+```
+data %>% head(5)
+```
 
 ```{r}
-
-data %>% head() %>% kable()
-
-data %>% tab(smok,hd)
-
-lm <- glm(bmi~smok+age+sex,data = data)
-
-summary(lm)
-
+data %>% head(5) %>%  flextable::regulartable() %>% 
+  flextable::colformat_double(digits = 2)
 ```
 
 ---
 
+### Creating a extended dataset by imputing counterfactual outcomes
+<hr>
+
+``` 
+impFit <- glm(hd ~ educ * smok + sex + age,
+              family = binomial("logit"), data = data)
+expanded_data <- neImpute(impFit)
+```
+
+.pull-left[
 
 ```{r}
-impFit <- glm(factor(hd) ~ educ * smok + sex + age,
+impFit <- glm(hd ~ educ * smok + sex + age,
               family = binomial("logit"), data = data)
-
 
 expanded_data <- neImpute(impFit)
 
-head(expanded_data) %>% knitr::kable(digits = 2)
+head(expanded_data) %>% flextable::regulartable() %>% 
+  flextable::colformat_double(digits = 2)
 
 ```
 
 The outcomes are no longer binary, but are substituted by conditional mean imputations
 
+]
 
----
+.pull-right[
 
 ```{r}
- neMod1 <- neModel(hd ~ educ0 * educ1 + sex + age,
- family = binomial("logit"), expData = expanded_data, se = "robust")
+data %>% head(5) %>%  flextable::regulartable() %>% 
+  flextable::colformat_double(digits = 2)
+```
 
 
-summary(neMod1)
+]
+
+
+---
+## Fitting NE model using expanded dataset
+<hr>
+
+.panelset[ 
+
+.panel[.panel-name[Code]
 
 ```
+neMod1 <- neModel(hd ~ educ0 * educ1 + sex + age,
+                  family = binomial("logit"), expData = expanded_data, se = "robust")
+
+summary(neMod1)
+```
+
+
+]
+
+.panel[.panel-name[Results]
+
+```{r}
+neMod1 <- neModel(hd ~ educ0 * educ1 + sex + age,
+                  family = binomial("logit"), expData = expanded_data, se = "robust")
+
+summ<- summary(neMod1)
+
+coeff <- summ$coefficients  %>% as.data.frame(optional = T)
+
+coeff$var <- row.names(coeff)
+coeff %>% as.data.frame(optional = T) %>% 
+  dplyr::select(var, everything()) %>% 
+  mutate_if(is.numeric, function(x) round(x,3)) %>% kable()
+
+```
+
+]
+
+
+]
 
