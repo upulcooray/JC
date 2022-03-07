@@ -378,7 +378,8 @@ coeff <- summ$coefficients  %>% as.data.frame(optional = T)
 coeff$var <- row.names(coeff)
 coeff %>% as.data.frame(optional = T) %>% 
   dplyr::select(var, everything()) %>% 
-  mutate_if(is.numeric, function(x) round(x,3)) %>% kable()
+  mutate_if(is.numeric, function(x) round(x,3)) %>% 
+  flextable::flextable(cwidth = 1) 
 
 ```
 
